@@ -25,4 +25,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(erro);
 
     }
+
+    @ExceptionHandler
+    public ResponseEntity<Erro> handleUniqueEmailException(UniqueEmailException e){
+        Erro erro =  new Erro(e.getMessage(), 404);
+        return ResponseEntity.badRequest().body(erro);
+
+    }
 }
