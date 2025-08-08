@@ -1,9 +1,6 @@
 package vuttr.VUTTR.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicUpdate;
@@ -28,6 +25,10 @@ public class Tools {
     private String description;
     @NotNull
     private List<String> tags;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Tools() {
     }
@@ -70,5 +71,13 @@ public class Tools {
 
     public void setTags(List tags) {
         this.tags = tags;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

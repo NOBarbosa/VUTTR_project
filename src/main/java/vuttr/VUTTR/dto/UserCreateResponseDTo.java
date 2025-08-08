@@ -2,7 +2,10 @@ package vuttr.VUTTR.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import vuttr.VUTTR.entity.Tools;
 import vuttr.VUTTR.entity.User;
+
+import java.util.List;
 
 public class UserCreateResponseDTo {
     @NotBlank
@@ -17,10 +20,21 @@ public class UserCreateResponseDTo {
     @NotNull
     private String email;
 
-    public UserCreateResponseDTo(Long id, String name, String email) {
+    private List<Tools> tools;
+
+    public UserCreateResponseDTo(Long id, String name, String email, List tools) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.tools = tools;
+    }
+
+    public List<Tools> getTools() {
+        return tools;
+    }
+
+    public void setTools(List<Tools> tools) {
+        this.tools = tools;
     }
 
     public Long getId() {

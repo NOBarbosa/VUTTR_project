@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
+
 
 @Entity
 @DynamicUpdate
@@ -25,6 +27,9 @@ public class User {
     @NotBlank
     @NotNull
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<Tools> tools;
 
     public User() {
     }
@@ -59,5 +64,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Tools> getTools() {
+        return tools;
+    }
+
+    public void setTools(List<Tools> tools) {
+        this.tools = tools;
     }
 }

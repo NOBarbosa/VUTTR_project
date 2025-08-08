@@ -20,7 +20,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public List<UserCreateResponseDTo> findAll(){
-    return  userRepository.findAll().stream().map(user -> new UserCreateResponseDTo(user.getId(), user.getName(), user.getEmail()))
+    return  userRepository.findAll().stream().map(user -> new UserCreateResponseDTo(user.getId(), user.getName(), user.getEmail(), user.getTools()))
             .collect(Collectors.toList());
 
     }
