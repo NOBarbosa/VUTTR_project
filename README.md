@@ -8,6 +8,7 @@ API simples para gerenciamento de **Users** e suas **Tools**, com autenticação
 
 * [Como rodar o projeto](#como-rodar-o-projeto)
 * [Banco H2 (console e acesso)](#banco-h2-console-e-acesso)
+* [Spring doc](#spring-doc)
 * [Autenticação (HTTP Basic)](#autenticação-http-basic)
 * [Rotas](#rotas)
 
@@ -62,9 +63,15 @@ spring.jpa.show-sql=true
 
 * Console: **`http://localhost:8080/h2-console`**
 * **JDBC URL**: `jdbc:h2:mem:testdb`
-* **User**: `sa`
+* **User**: ``
 * **Password**: *(vazio)*
 * **Observação**: o console H2 já está liberado no `SecurityConfig` (frameOptions sameOrigin e `permitAll`).
+
+------
+
+## Spring doc
+
+* Console: **`http://localhost:8080/swagger-ui/index.html`**
 
 ---
 
