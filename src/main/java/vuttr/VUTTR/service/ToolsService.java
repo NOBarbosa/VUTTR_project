@@ -1,13 +1,21 @@
 package vuttr.VUTTR.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import vuttr.VUTTR.dto.ToolsCreateDto;
+import org.springframework.data.domain.Page;
+
 import vuttr.VUTTR.entity.Tools;
 import vuttr.VUTTR.exception.NotFoundException;
 import vuttr.VUTTR.repository.ToolsRepository;
+import vuttr.VUTTR.repository.UserRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -15,22 +23,29 @@ public class ToolsService {
     @Autowired
 
     private ToolsRepository toolsRepository;
+    private  UserRepository userRepository;
 
-    public List<Tools> findAll(){ return toolsRepository.findAll();}
+    public ToolsService(ToolsRepository toolsRepository, UserRepository userRepository) {
+        this.toolsRepository = toolsRepository;
+        this.userRepository = userRepository;
+    }
+    public Tools findOneByUser(Long userId, Long toolId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
-    public Optional<Tools> findOneById(long id){
-
-        return Optional.ofNullable(toolsRepository.findById(id).orElseThrow(() -> new NotFoundException("Não encontramos ferramenta com o id: " + id)));
+        return toolsRepository.findByIdAndUserId(toolId, userId)
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                "Ferramenta não encontrada para userId=%d e toolId=%d"
+                                        .formatted(userId, toolId)
+                        )
+                );
     }
 
-
-    public Tools createTools(ToolsCreateDto createDto){
-        Tools tools = new Tools();
-            tools.setTitle(createDto.getTitle());
-            tools.setLink(createDto.getLink());
-            tools.setDescription(createDto.getDescription());
-            tools.setTags(createDto.getTags());
-
-        return toolsRepository.save(tools);
+    public List<Tools> listByUserAndOptionalTag(Long userId, String tag) {
+        if (tag == null || tag.isBlank()) {
+            return toolsRepository.findAllByUserId(userId);
+        }
+        return toolsRepository.findByUserIdAndTagIgnoreCase(userId, tag.trim());
     }
 }

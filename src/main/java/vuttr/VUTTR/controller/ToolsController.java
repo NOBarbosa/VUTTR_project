@@ -16,24 +16,4 @@ import java.util.Optional;
 public class ToolsController {
     @Autowired
     private ToolsService toolsService;
-    // GET all
-    @GetMapping
-    public List<Tools> findAll(){
-        return toolsService.findAll();
-    }
-    // GET one by id
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Tools> findOneById( @PathVariable("id") int id) {
-        Optional<Tools> result = toolsService.findOneById(id);
-
-        return ResponseEntity.of(result);
-
-    }
-    // POST create tool
-    @PostMapping
-    public Tools createTools(@RequestBody  ToolsCreateDto toolsCreateDto){
-        return  toolsService.createTools(toolsCreateDto);
-    }
-
 }

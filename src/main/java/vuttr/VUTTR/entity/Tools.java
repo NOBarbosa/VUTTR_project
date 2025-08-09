@@ -1,10 +1,13 @@
 package vuttr.VUTTR.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,11 +26,18 @@ public class Tools {
     @NotNull
     @NotBlank
     private String description;
-    @NotNull
-    private List<String> tags;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "tb_tool_tags",
+            joinColumns = @JoinColumn(name = "tool_id")
+    )
+    @Column(name = "tag")
+    @NotEmpty
+    private List<String> tags = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     public Tools() {
