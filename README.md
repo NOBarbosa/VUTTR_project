@@ -63,7 +63,7 @@ spring.jpa.show-sql=true
 
 * Console: **`http://localhost:8080/h2-console`**
 * **JDBC URL**: `jdbc:h2:mem:testdb`
-* **User**: ``
+* **User**: *(vazio)*
 * **Password**: *(vazio)*
 * **Observação**: o console H2 já está liberado no `SecurityConfig` (frameOptions sameOrigin e `permitAll`).
 
