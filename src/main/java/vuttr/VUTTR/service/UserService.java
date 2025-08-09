@@ -2,6 +2,7 @@ package vuttr.VUTTR.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vuttr.VUTTR.dto.ToolsCreateDto;
 import vuttr.VUTTR.dto.UserCreateDto;
@@ -21,11 +22,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ToolsRepository toolsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, ToolsRepository toolsRepository) {
+    public UserService(UserRepository userRepository, ToolsRepository toolsRepository,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.toolsRepository = toolsRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserCreateResponseDTo> findAll(){
@@ -35,22 +38,24 @@ public class UserService {
     }
 
 
-    public User createUser(UserCreateDto userDto){
-
+    public User createUser(UserCreateDto userDto) {
         boolean exists = userRepository.findByEmail(userDto.getEmail()).isPresent();
         if (exists) {
             throw new UniqueEmailException("E-mail já cadastrado: " + userDto.getEmail());
         }
+        if (userDto.getPassword() == null || userDto.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Senha obrigatória");
+        }
+
         User user = new User();
-
-
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         return userRepository.save(user);
     }
+
+
     @Transactional
     public Tools createTool(Long userId, ToolsCreateDto toolsDto) {
        var user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
