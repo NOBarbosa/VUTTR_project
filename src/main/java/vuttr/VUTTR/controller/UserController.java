@@ -2,13 +2,9 @@ package vuttr.VUTTR.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vuttr.VUTTR.dto.ToolEditDto;
 import vuttr.VUTTR.dto.ToolsCreateDto;
 import vuttr.VUTTR.dto.UserCreateDto;
 import vuttr.VUTTR.dto.UserCreateResponseDTo;
@@ -18,7 +14,6 @@ import vuttr.VUTTR.service.ToolsService;
 import vuttr.VUTTR.service.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -67,5 +62,34 @@ public class UserController {
     ) {
         var result = toolsService.listByUserAndOptionalTag(userId, tag);
         return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/{userId}/tools/{toolId}")
+    public ResponseEntity<Void> deleteToolById(
+            @PathVariable Long userId,
+            @PathVariable Long toolId
+    ){
+         toolsService.deleteOneByUser(userId, toolId);
+        return ResponseEntity.ok().build();
+
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId){
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PatchMapping("/{userId}/tools/{toolId}")
+    public ResponseEntity<Tools> patchTool(
+            @PathVariable Long userId,
+            @PathVariable Long toolId,
+            @RequestBody ToolEditDto body
+    ) {
+        Tools updated = toolsService.updateTool(userId, toolId, body);
+
+
+        return ResponseEntity.ok(updated);
     }
 }

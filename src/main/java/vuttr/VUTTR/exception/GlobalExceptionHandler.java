@@ -32,4 +32,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(erro);
 
     }
+
+    @ExceptionHandler
+    public ResponseEntity<Erro> handleNonEmptyException(NonEmptyException e){
+        Erro erro =  new Erro(e.getMessage(), 400);
+        return ResponseEntity.badRequest().body(erro);
+
+
+    }
 }

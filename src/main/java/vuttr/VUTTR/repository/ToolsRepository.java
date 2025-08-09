@@ -13,6 +13,9 @@ import java.util.Optional;
 
 public interface ToolsRepository extends JpaRepository<Tools, Long> {
     Optional<Tools> findByIdAndUserId(Long id, Long userId);
+    Optional<Void> deleteByIdAndUserId(Long id, Long userId);
+    boolean existsByIdAndUserId(Long id, Long userId);
+
 
     @Query("""
       select t

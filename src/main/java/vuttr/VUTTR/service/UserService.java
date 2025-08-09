@@ -64,4 +64,13 @@ public class UserService {
 
         return toolsRepository.save(tool);
     }
+
+    @Transactional
+    public void deleteUser(Long id){
+        userRepository.findById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+        userRepository.deleteById(id);
+
+    }
+
+
 }
